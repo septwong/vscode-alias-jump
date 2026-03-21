@@ -1,21 +1,61 @@
 {
   "name": "alias-jump",
-  "displayName": "alias-jump",
-  "description": "",
+  "displayName": "Alias Jump",
+  "description": "Navigate to alias path definitions with Ctrl+Click. Support @/components/Button style imports.",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.110.0"
   },
   "categories": [
+    "Programming Languages",
     "Other"
   ],
-  "activationEvents": [],
+  "keywords": [
+    "alias",
+    "path",
+    "jump",
+    "navigation",
+    "import"
+  ],
+  "activationEvents": [
+    "onLanguage:vue",
+    "onLanguage:javascript",
+    "onLanguage:typescript",
+    "onLanguage:javascriptreact",
+    "onLanguage:typescriptreact",
+    "onLanguage:css",
+    "onLanguage:scss",
+    "onLanguage:less"
+  ],
   "main": "./dist/extension.js",
   "contributes": {
+    "configuration": {
+      "title": "Alias Jump",
+      "properties": {
+        "alias-jump.mappings": {
+          "type": "object",
+          "default": {
+            "@": "/src"
+          },
+          "description": "Path mappings. Key is the alias, value is the path relative to project root."
+        },
+        "alias-jump.rootpath": {
+          "type": "string",
+          "default": "package.json",
+          "description": "File name used to identify the project root directory."
+        },
+        "alias-jump.allowedsuffix": {
+          "type": "array",
+          "default": ["js", "vue", "jsx", "ts", "tsx", "svelte"],
+          "description": "Allowed file extensions for auto-completion."
+        }
+      }
+    },
     "commands": [
       {
-        "command": "alias-jump.helloWorld",
-        "title": "Hello World"
+        "command": "alias-jump.reloadConfig",
+        "title": "Reload Configuration",
+        "category": "Alias Jump"
       }
     ]
   },
