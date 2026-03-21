@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#42b883"/>
+      <stop offset="100%" style="stop-color:#35495e"/>
+    </linearGradient>
+    <linearGradient id="arrow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#fff"/>
+      <stop offset="100%" style="stop-color:#e0e0e0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 圆角矩形背景 -->
+  <rect x="8" y="8" width="112" height="112" rx="20" fill="url(#bg)"/>
+
+  <!-- 起点圆点 -->
+  <circle cx="28" cy="64" r="8" fill="white"/>
+
+  <!-- 虚线路径 -->
+  <path d="M44 64 L56 64" stroke="white" stroke-width="6" stroke-linecap="round" stroke-dasharray="2 8"/>
+
+  <!-- 箭头 -->
+  <path d="M60 44 L88 64 L60 84" fill="none" stroke="url(#arrow)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- 终点定位标记 - 修复居中 -->
+  <g transform="translate(92, 52)">
+    <circle cx="12" cy="12" r="12" fill="white" opacity="0.9"/>
+    <circle cx="12" cy="12" r="5" fill="#42b883"/>
+  </g>
+</svg>
