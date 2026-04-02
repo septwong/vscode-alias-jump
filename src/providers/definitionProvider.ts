@@ -1,23 +1,29 @@
-import * as vscode from 'vscode';
 import * as path from 'path';
+import * as vscode from 'vscode';
+import { ConfigService } from '../services/configService';
 import {
-  getConfig,
   screeningPath,
-  rootPath,
   joiningSuffix,
   screeningRelativePath,
   removeComments
 } from '../utils';
 
 export class AliasDefinitionProvider implements vscode.DefinitionProvider {
-  constructor(private context: vscode.ExtensionContext) {}
+  constructor(private configService: ConfigService) {}
 
   async provideDefinition(
     document: vscode.TextDocument,
     position: vscode.Position,
     _token: vscode.CancellationToken
   ): Promise<vscode.DefinitionLink[] | vscode.Definition | undefined> {
-    const config = getConfig();
+    // Get workspace folder for current file
+    const workspaceFolder = vscode.workspace.getWorkspaceFolder(document.uri);
+    if (!workspaceFolder) {
+      return undefined;
+    }
+
+    // Get config for this workspace
+    const config = await this.configService.getConfig(workspaceFolder);
     const fileName = document.fileName;
     const workDir = path.dirname(fileName);
 
@@ -38,12 +44,10 @@ export class AliasDefinitionProvider implements vscode.DefinitionProvider {
     let target: { rang: vscode.Range } | null = null;
 
     if (aliasResult) {
-      // Find project root
-      const projectRoot = rootPath(workDir, config.rootpath, this.context.workspaceState);
-      if (projectRoot) {
-        targetPath = path.resolve(projectRoot, aliasResult.path);
-        target = aliasResult;
-      }
+      // Use workspace folder path as root
+      const projectRoot = workspaceFolder.uri.fsPath;
+      targetPath = path.resolve(projectRoot, aliasResult.path);
+      target = aliasResult;
     } else if (relativeResult) {
       targetPath = path.resolve(workDir, relativeResult.text);
       target = relativeResult;

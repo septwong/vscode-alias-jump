@@ -1,8 +1,17 @@
 import * as vscode from 'vscode';
 import { AliasDefinitionProvider } from './providers/definitionProvider';
+import { ConfigService } from './services/configService';
+import { FileWatcherService } from './services/fileWatcherService';
+
+let configService: ConfigService;
+let fileWatcherService: FileWatcherService;
 
 export function activate(context: vscode.ExtensionContext) {
   console.log('Alias Jump extension is now active!');
+
+  // Initialize services
+  configService = new ConfigService(context);
+  fileWatcherService = new FileWatcherService(context, configService);
 
   // Supported languages
   const languages = [
@@ -16,8 +25,9 @@ export function activate(context: vscode.ExtensionContext) {
     { scheme: 'file', language: 'typescriptreact' }
   ];
 
-  // Register DefinitionProvider
-  const definitionProvider = new AliasDefinitionProvider(context);
+  // Register DefinitionProvider with services
+  const definitionProvider = new AliasDefinitionProvider(configService);
+
   const disposable = vscode.languages.registerDefinitionProvider(
     languages,
     definitionProvider
@@ -27,12 +37,16 @@ export function activate(context: vscode.ExtensionContext) {
 
   // Register reload config command
   const reloadCommand = vscode.commands.registerCommand('alias-jump.reloadConfig', () => {
-    // Clear the root path cache
-    context.workspaceState.update('rootList', []);
+    configService.clearAllCaches();
     vscode.window.showInformationMessage('Alias Jump configuration reloaded!');
   });
 
   context.subscriptions.push(reloadCommand);
 }
 
-export function deactivate() {}
+export function deactivate() {
+  // Cleanup watchers
+  if (fileWatcherService) {
+    fileWatcherService.dispose();
+  }
+}
