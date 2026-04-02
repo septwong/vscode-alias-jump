@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
+import * as jsonc from 'jsonc-parser';
 import { AliasConfigReader, AliasMapping } from './types';
 
 /**
@@ -51,9 +52,8 @@ export class TsConfigReader implements AliasConfigReader {
     const aliases: AliasMapping[] = [];
 
     try {
-      // Strip comments from JSON (tsconfig allows comments)
-      const cleanContent = this.stripComments(content);
-      const config = JSON.parse(cleanContent);
+      // Use jsonc-parser to properly parse JSON with comments
+      const config = jsonc.parse(content);
 
       const compilerOptions = config.compilerOptions || {};
       const paths = compilerOptions.paths || {};
@@ -83,16 +83,5 @@ export class TsConfigReader implements AliasConfigReader {
     }
 
     return aliases;
-  }
-
-  /**
-   * Strip JSON comments (tsconfig allows single-line and multi-line comments)
-   */
-  private stripComments(content: string): string {
-    // Remove single-line comments
-    let result = content.replace(/\/\/.*$/gm, '');
-    // Remove multi-line comments
-    result = result.replace(/\/\*[\s\S]*?\*\//g, '');
-    return result;
   }
 }
