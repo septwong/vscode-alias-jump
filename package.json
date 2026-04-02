@@ -1,7 +1,7 @@
 {
   "name": "alias-jump",
   "displayName": "Alias Jump",
-  "description": "Navigate to alias path definitions with Ctrl+Click. Support @/components/Button style imports.",
+  "description": "%description%",
   "version": "1.0.0",
   "icon": "assets/logo.png",
   "publisher": "SeptWong",
@@ -45,32 +45,32 @@
   "main": "./dist/extension.js",
   "contributes": {
     "configuration": {
-      "title": "Alias Jump",
+      "title": "%configuration.title%",
       "properties": {
         "alias-jump.mappings": {
           "type": "object",
           "default": {
             "@": "/src"
           },
-          "description": "Path mappings. Key is the alias, value is the path relative to project root."
+          "description": "%configuration.mappings.description%"
         },
         "alias-jump.rootpath": {
           "type": "string",
           "default": "package.json",
-          "description": "File name used to identify the project root directory."
+          "description": "%configuration.rootpath.description%"
         },
         "alias-jump.allowedsuffix": {
           "type": "array",
           "default": ["js", "vue", "jsx", "ts", "tsx", "svelte"],
-          "description": "Allowed file extensions for auto-completion."
+          "description": "%configuration.allowedsuffix.description%"
         }
       }
     },
     "commands": [
       {
         "command": "alias-jump.reloadConfig",
-        "title": "Reload Configuration",
-        "category": "Alias Jump"
+        "title": "%command.reloadConfig.title%",
+        "category": "%command.category%"
       }
     ]
   },

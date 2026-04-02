@@ -1,0 +1,10 @@
+{
+  "displayName": "Alias Jump",
+  "description": "Navigate to alias path definitions with Ctrl+Click. Support @/components/Button style imports.",
+  "configuration.title": "Alias Jump",
+  "configuration.mappings.description": "Path mappings. Key is the alias, value is the path relative to project root.",
+  "configuration.rootpath.description": "File name used to identify the project root directory.",
+  "configuration.allowedsuffix.description": "Allowed file extensions for auto-completion.",
+  "command.reloadConfig.title": "Reload Configuration",
+  "command.category": "Alias Jump"
+}
