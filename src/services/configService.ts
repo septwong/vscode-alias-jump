@@ -80,7 +80,7 @@ export class ConfigService {
     }
 
     // Get other settings from VS Code
-    const vscodeConfig = vscode.workspace.getConfiguration('alias-jump', workspaceFolder.uri);
+    const vscodeConfig = vscode.workspace.getConfiguration('alias-jump-pro', workspaceFolder.uri);
 
     return {
       mappings,

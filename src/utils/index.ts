@@ -16,7 +16,7 @@ export interface RelativePathResult {
 
 // Get configuration values
 export function getConfig() {
-  const config = vscode.workspace.getConfiguration('alias-jump');
+  const config = vscode.workspace.getConfiguration('alias-jump-pro');
   return {
     mappings: config.get<Record<string, string>>('mappings', { '@': '/src' }),
     rootpath: config.get<string>('rootpath', 'package.json'),

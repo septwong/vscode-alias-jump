@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { AliasConfigReader, AliasMapping } from './types';
 
 /**
- * Reader for VS Code settings (alias-jump.mappings)
+ * Reader for VS Code settings (alias-jump-pro.mappings)
  * Highest priority - user-defined settings always take precedence
  */
 export class VSCodeSettingsReader implements AliasConfigReader {
@@ -15,7 +15,7 @@ export class VSCodeSettingsReader implements AliasConfigReader {
   }
 
   async readAliases(workspaceFolder: vscode.WorkspaceFolder): Promise<AliasMapping[]> {
-    const config = vscode.workspace.getConfiguration('alias-jump', workspaceFolder.uri);
+    const config = vscode.workspace.getConfiguration('alias-jump-pro', workspaceFolder.uri);
     const mappings = config.get<Record<string, string>>('mappings', { '@': '/src' });
 
     return Object.entries(mappings).map(([alias, path]) => ({

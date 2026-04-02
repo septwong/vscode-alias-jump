@@ -33,9 +33,9 @@ import { utils } from '@/utils'           // Ctrl+Click 跳转
 
 | 设置 | 类型 | 默认值 | 描述 |
 |------|------|--------|------|
-| `alias-jump.mappings` | object | `{ "@": "/src" }` | 路径映射。键为别名，值为相对于项目根目录的路径。 |
-| `alias-jump.rootpath` | string | `"package.json"` | 用于识别项目根目录的文件名。 |
-| `alias-jump.allowedsuffix` | array | `["js", "vue", "jsx", "ts", "tsx", "svelte"]` | 自动补全支持的文件扩展名。 |
+| `alias-jump-pro.mappings` | object | `{ "@": "/src" }` | 路径映射。键为别名，值为相对于项目根目录的路径。 |
+| `alias-jump-pro.rootpath` | string | `"package.json"` | 用于识别项目根目录的文件名。 |
+| `alias-jump-pro.allowedsuffix` | array | `["js", "vue", "jsx", "ts", "tsx", "svelte"]` | 自动补全支持的文件扩展名。 |
 
 ### 配置示例
 
@@ -43,13 +43,13 @@ import { utils } from '@/utils'           // Ctrl+Click 跳转
 
 ```json
 {
-  "alias-jump.mappings": {
+  "alias-jump-pro.mappings": {
     "@": "/src",
     "@components": "/src/components",
     "@utils": "/src/utils",
     "@assets": "/src/assets"
   },
-  "alias-jump.allowedsuffix": ["js", "vue", "jsx", "ts", "tsx", "svelte"]
+  "alias-jump-pro.allowedsuffix": ["js", "vue", "jsx", "ts", "tsx", "svelte"]
 }
 ```
 

@@ -33,9 +33,9 @@ This extension contributes the following settings:
 
 | Setting | Type | Default | Description |
 |---------|------|---------|-------------|
-| `alias-jump.mappings` | object | `{ "@": "/src" }` | Path mappings. Key is the alias, value is the path relative to project root. |
-| `alias-jump.rootpath` | string | `"package.json"` | File name used to identify the project root directory. |
-| `alias-jump.allowedsuffix` | array | `["js", "vue", "jsx", "ts", "tsx", "svelte"]` | Allowed file extensions for auto-completion. |
+| `alias-jump-pro.mappings` | object | `{ "@": "/src" }` | Path mappings. Key is the alias, value is the path relative to project root. |
+| `alias-jump-pro.rootpath` | string | `"package.json"` | File name used to identify the project root directory. |
+| `alias-jump-pro.allowedsuffix` | array | `["js", "vue", "jsx", "ts", "tsx", "svelte"]` | Allowed file extensions for auto-completion. |
 
 ### Configuration Example
 
@@ -43,13 +43,13 @@ Add to your `settings.json`:
 
 ```json
 {
-  "alias-jump.mappings": {
+  "alias-jump-pro.mappings": {
     "@": "/src",
     "@components": "/src/components",
     "@utils": "/src/utils",
     "@assets": "/src/assets"
   },
-  "alias-jump.allowedsuffix": ["js", "vue", "jsx", "ts", "tsx", "svelte"]
+  "alias-jump-pro.allowedsuffix": ["js", "vue", "jsx", "ts", "tsx", "svelte"]
 }
 ```
 

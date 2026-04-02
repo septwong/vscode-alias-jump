@@ -1,5 +1,5 @@
 {
-  "name": "alias-jump",
+  "name": "alias-jump-pro",
   "displayName": "Alias Jump",
   "description": "%description%",
   "version": "1.1.0",
@@ -47,19 +47,19 @@
     "configuration": {
       "title": "%configuration.title%",
       "properties": {
-        "alias-jump.mappings": {
+        "alias-jump-pro.mappings": {
           "type": "object",
           "default": {
             "@": "/src"
           },
           "description": "%configuration.mappings.description%"
         },
-        "alias-jump.rootpath": {
+        "alias-jump-pro.rootpath": {
           "type": "string",
           "default": "package.json",
           "description": "%configuration.rootpath.description%"
         },
-        "alias-jump.allowedsuffix": {
+        "alias-jump-pro.allowedsuffix": {
           "type": "array",
           "default": ["js", "vue", "jsx", "ts", "tsx", "svelte"],
           "description": "%configuration.allowedsuffix.description%"
@@ -68,7 +68,7 @@
     },
     "commands": [
       {
-        "command": "alias-jump.reloadConfig",
+        "command": "alias-jump-pro.reloadConfig",
         "title": "%command.reloadConfig.title%",
         "category": "%command.category%"
       }

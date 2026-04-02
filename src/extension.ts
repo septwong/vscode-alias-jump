@@ -36,7 +36,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(disposable);
 
   // Register reload config command
-  const reloadCommand = vscode.commands.registerCommand('alias-jump.reloadConfig', () => {
+  const reloadCommand = vscode.commands.registerCommand('alias-jump-pro.reloadConfig', () => {
     configService.clearAllCaches();
     vscode.window.showInformationMessage('Alias Jump configuration reloaded!');
   });
