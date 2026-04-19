@@ -14,18 +14,9 @@ export interface RelativePathResult {
   columns: [number, number];
 }
 
-// Get configuration values
-export function getConfig() {
-  const config = vscode.workspace.getConfiguration('alias-jump-pro');
-  return {
-    mappings: config.get<Record<string, string>>('mappings', { '@': '/src' }),
-    rootpath: config.get<string>('rootpath', 'package.json'),
-    allowedsuffix: config.get<string[]>('allowedsuffix', ['js', 'vue', 'jsx', 'ts', 'tsx', 'svelte'])
-  };
-}
-
 /**
  * Parse alias path from line text
+ * Supports both '@' and '@/' format aliases
  * Input: "import Button from '@/components/Button'"
  * Output: { path: 'src/components/Button', rang: Range, columns: [14, 34] }
  */
@@ -41,57 +32,39 @@ export function screeningPath(linetext: string, position: vscode.Position, mappi
   const i = linetext.indexOf(text);
   const columns: [number, number] = [i, i + text.length];
 
-  // Split by '/' and get the first part as alias key
-  const parts = text.split('/');
-  const key = parts[0];
+  // Find matching alias key
+  // Try both formats: '@' and '@/' (with trailing slash)
+  for (const key of Object.keys(mappings)) {
+    const keyWithSlash = key.endsWith('/') ? key : key + '/';
 
-  // Check if the key exists in mappings
-  if (mappings.hasOwnProperty(key)) {
-    let mappedPath = mappings[key];
-    // Remove leading '/' if present
-    if (mappedPath[0] === '/') {
-      mappedPath = mappedPath.substring(1);
+    // Check if path starts with alias (with or without trailing slash)
+    if (text === key || text.startsWith(keyWithSlash)) {
+      let mappedPath = mappings[key];
+      // Remove leading '/' if present
+      if (mappedPath[0] === '/') {
+        mappedPath = mappedPath.substring(1);
+      }
+
+      // Get the rest of the path after the alias
+      let restPath: string;
+      if (text === key) {
+        restPath = '';
+      } else if (text.startsWith(keyWithSlash)) {
+        restPath = text.substring(keyWithSlash.length);
+      } else {
+        // text starts with key (no slash), e.g. '@components' when key is '@'
+        restPath = text.substring(key.length);
+      }
+
+      return {
+        path: restPath ? path.join(mappedPath, restPath) : mappedPath,
+        rang: new vscode.Range(position.line, columns[0], position.line, columns[1]),
+        columns
+      };
     }
-    // Join the mapped path with the rest of the path
-    const restParts = parts.slice(1);
-    return {
-      path: path.join(mappedPath, ...restParts),
-      rang: new vscode.Range(position.line, columns[0], position.line, columns[1]),
-      columns
-    };
   }
 
   return null;
-}
-
-/**
- * Find project root directory by looking for rootpath file
- * Uses cache from workspaceState for performance
- */
-export function rootPath(presentPath: string, rootfile: string, memento: vscode.Memento): string {
-  // Check cache
-  const rootList = memento.get<string[]>('rootList', []);
-
-  // Cache hit
-  for (const item of rootList) {
-    if (presentPath.indexOf(item) === 0) {
-      return item;
-    }
-  }
-
-  // Walk up the directory tree
-  let arr = presentPath.split(path.sep);
-  for (let i = 0; i < arr.length; i++) {
-    const currentPath = path.join(...arr);
-    if (fs.existsSync(path.join(currentPath, rootfile))) {
-      // Cache the result
-      memento.update('rootList', [...rootList, currentPath]);
-      return currentPath;
-    }
-    arr.pop();
-  }
-
-  return '';
 }
 
 /**

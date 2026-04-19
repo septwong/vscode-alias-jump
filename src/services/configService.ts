@@ -51,6 +51,7 @@ export class ConfigService {
   /**
    * Build config by merging all reader outputs
    * Higher priority readers override lower priority ones
+   * Falls back to default { "@": "src" } if no readers provide mappings
    */
   private async buildConfig(workspaceFolder: vscode.WorkspaceFolder): Promise<ResolvedConfig> {
     const allMappings: Map<string, string> = new Map();
@@ -71,6 +72,11 @@ export class ConfigService {
         // Reader failed, continue with others
         console.error(`Reader ${reader.name} failed:`, e);
       }
+    }
+
+    // Fallback to default if no mappings found
+    if (allMappings.size === 0) {
+      allMappings.set('@', 'src');
     }
 
     // Convert to final format

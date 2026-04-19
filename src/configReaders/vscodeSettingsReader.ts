@@ -4,6 +4,7 @@ import { AliasConfigReader, AliasMapping } from './types';
 /**
  * Reader for VS Code settings (alias-jump-pro.mappings)
  * Highest priority - user-defined settings always take precedence
+ * Note: Only returns mappings if user has explicitly configured them
  */
 export class VSCodeSettingsReader implements AliasConfigReader {
   name = 'vscode-settings';
@@ -16,11 +17,21 @@ export class VSCodeSettingsReader implements AliasConfigReader {
 
   async readAliases(workspaceFolder: vscode.WorkspaceFolder): Promise<AliasMapping[]> {
     const config = vscode.workspace.getConfiguration('alias-jump-pro', workspaceFolder.uri);
-    const mappings = config.get<Record<string, string>>('mappings', { '@': '/src' });
 
-    return Object.entries(mappings).map(([alias, path]) => ({
-      alias,
-      path: path.startsWith('/') ? path.slice(1) : path
-    }));
+    // Check if user has explicitly configured mappings (not using default)
+    const mappings = config.inspect<Record<string, string>>('mappings');
+
+    // Only return aliases if user has actually configured them
+    // This allows other readers (tsconfig, vite, webpack) to provide defaults
+    if (mappings?.globalValue || mappings?.workspaceValue || mappings?.workspaceFolderValue) {
+      const actualMappings = config.get<Record<string, string>>('mappings', {});
+      return Object.entries(actualMappings).map(([alias, path]) => ({
+        alias,
+        path: path.startsWith('/') ? path.slice(1) : path
+      }));
+    }
+
+    // No user configuration, return empty to let other readers take over
+    return [];
   }
 }

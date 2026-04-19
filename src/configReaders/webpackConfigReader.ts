@@ -50,40 +50,37 @@ export class WebpackConfigReader implements AliasConfigReader {
 
   /**
    * Parse resolve.alias from webpack config
+   * Uses Map to avoid duplicate aliases
    */
   private parseAliasConfig(content: string, configPath: string): AliasMapping[] {
-    const aliases: AliasMapping[] = [];
+    const aliasMap: Map<string, string> = new Map();
     const configDir = path.dirname(configPath);
 
-    // Match resolve.alias block
-    // Pattern: resolve: { alias: { '@': path.resolve(__dirname, 'src') } }
+    // Try resolve.alias block first: resolve: { alias: { '@': path.resolve(...) } }
     const resolveBlockMatch = content.match(/resolve\s*:\s*\{[^}]*alias\s*:\s*\{([^}]+)\}[^}]*\}/s);
-    if (!resolveBlockMatch) {
-      // Try simpler pattern
-      const simpleMatch = content.match(/alias\s*:\s*\{([^}]+)\}/s);
-      if (!simpleMatch) {
-        return aliases;
+    if (resolveBlockMatch) {
+      const aliasBlockMatch = resolveBlockMatch[0].match(/alias\s*:\s*\{([^}]+)\}/s);
+      if (aliasBlockMatch) {
+        this.extractAliasesFromBlock(aliasBlockMatch[1], configDir, aliasMap);
       }
-      return this.extractAliasesFromBlock(simpleMatch[1], configDir);
     }
 
-    // Extract alias block from resolve block
-    const aliasBlockMatch = resolveBlockMatch[0].match(/alias\s*:\s*\{([^}]+)\}/s);
-    if (aliasBlockMatch) {
-      aliases.push(...this.extractAliasesFromBlock(aliasBlockMatch[1], configDir));
+    // Also try standalone alias block: alias: { '@': ... }
+    const simpleMatch = content.match(/alias\s*:\s*\{([^}]+)\}/s);
+    if (simpleMatch && !resolveBlockMatch) {
+      this.extractAliasesFromBlock(simpleMatch[1], configDir, aliasMap);
     }
 
-    return aliases;
+    return Array.from(aliasMap.entries()).map(([alias, path]) => ({ alias, path }));
   }
 
   /**
    * Extract aliases from an alias block
+   * Supports both path.resolve() and resolve() (imported from 'path')
    */
-  private extractAliasesFromBlock(block: string, configDir: string): AliasMapping[] {
-    const aliases: AliasMapping[] = [];
-
+  private extractAliasesFromBlock(block: string, configDir: string, aliasMap: Map<string, string>): void {
     // Match individual alias entries
-    // Pattern: '@': 'value' or '@': path.resolve(__dirname, 'src')
+    // Pattern: '@': 'value' or '@': path.resolve(...) or '@': resolve(...)
     const entryPattern = /['"]([^'"]+)['"]\s*:\s*/g;
 
     let match;
@@ -94,8 +91,8 @@ export class WebpackConfigReader implements AliasConfigReader {
       // Extract the value after the colon
       const remaining = block.slice(startIndex);
 
-      // Try to match path.resolve()
-      const resolveMatch = remaining.match(/path\.resolve\s*\(([^)]+)\)/);
+      // Try to match resolve() or path.resolve()
+      const resolveMatch = remaining.match(/(?:path\.)?resolve\s*\(([^)]+)\)/);
       if (resolveMatch) {
         const args = resolveMatch[1].split(',').map(a => a.trim());
         // Get the path argument (skip __dirname)
@@ -110,7 +107,7 @@ export class WebpackConfigReader implements AliasConfigReader {
 
         if (mappedPath) {
           mappedPath = mappedPath.replace(/^\.?\//, '');
-          aliases.push({ alias, path: mappedPath });
+          aliasMap.set(alias, mappedPath);
         }
         continue;
       }
@@ -120,10 +117,8 @@ export class WebpackConfigReader implements AliasConfigReader {
       if (stringMatch) {
         let mappedPath = stringMatch[1];
         mappedPath = mappedPath.replace(/^\.?\//, '');
-        aliases.push({ alias, path: mappedPath });
+        aliasMap.set(alias, mappedPath);
       }
     }
-
-    return aliases;
   }
 }
