@@ -8,7 +8,7 @@
 
 - **别名路径跳转**：通过路径别名跳转到文件（例如 `@/components/Button`）
 - **相对路径支持**：同时支持 `./` 和 `../` 相对路径
-- **多语言支持**：支持 Vue、JavaScript、TypeScript、JSX、TSX、CSS、SCSS 和 Less
+- **多语言支持**：支持 Vue、JavaScript、TypeScript、JSX、TSX、CSS、SCSS、Less 和 Svelte
 - **自动后缀解析**：自动解析文件扩展名（`.js`、`.vue`、`.ts` 等）
 - **项目根目录检测**：通过查找 `package.json` 自动识别项目根目录
 - **性能优化**：缓存项目根路径以加快导航速度
@@ -69,6 +69,7 @@ import { utils } from '@/utils'           // Ctrl+Click 跳转
 - CSS (`.css`)
 - SCSS (`.scss`)
 - Less (`.less`)
+- Svelte (`.svelte`)
 
 ## 许可证
 
