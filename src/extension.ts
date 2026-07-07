@@ -10,7 +10,7 @@ export function activate(context: vscode.ExtensionContext) {
   console.log('Alias Jump extension is now active!');
 
   // Initialize services
-  configService = new ConfigService(context);
+  configService = new ConfigService();
   fileWatcherService = new FileWatcherService(context, configService);
 
   // Supported languages

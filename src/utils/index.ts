@@ -22,7 +22,7 @@ export interface RelativePathResult {
  */
 export function screeningPath(linetext: string, position: vscode.Position, mappings: Record<string, string>): PathResult | null {
   // Match quoted strings
-  const arr = linetext.match(/('.+')|(".+")/);
+  const arr = linetext.match(/('[^']+')|("[^"]+")/);
   if (!arr) {
     return null;
   }
@@ -103,7 +103,7 @@ export function joiningSuffix(targetPath: string, allowedsuffix: string[]): stri
  * Parse relative path (./ or ../) from line text
  */
 export function screeningRelativePath(linetext: string, position: vscode.Position): RelativePathResult | null {
-  const arr = linetext.match(/('.+')|(".+")/);
+  const arr = linetext.match(/('[^']+')|("[^"]+")/);
   if (!arr) {
     return null;
   }
@@ -123,17 +123,4 @@ export function screeningRelativePath(linetext: string, position: vscode.Positio
     rang: new vscode.Range(position.line, i, position.line, i + text.length),
     columns
   };
-}
-
-/**
- * Remove comments from line text and adjust position
- */
-export function removeComments(originText: string, position: vscode.Position): { linetext: string; adjustedPosition: vscode.Position } {
-  const reg = /\/\*{1,2}[\s\S]*?\*\//g;
-  const linetext = originText.replace(reg, '');
-  const commentMatch = originText.match(reg);
-  const numComment = commentMatch ? commentMatch.join('').length : 0;
-  const adjustedPosition = position.translate(0, -numComment);
-
-  return { linetext, adjustedPosition };
 }

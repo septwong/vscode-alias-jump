@@ -45,30 +45,29 @@ export class WebpackConfigReader implements AliasConfigReader {
       return [];
     }
 
-    return this.parseAliasConfig(configContent, configPath);
+    return this.parseAliasConfig(configContent);
   }
 
   /**
    * Parse resolve.alias from webpack config
    * Uses Map to avoid duplicate aliases
    */
-  private parseAliasConfig(content: string, configPath: string): AliasMapping[] {
+  private parseAliasConfig(content: string): AliasMapping[] {
     const aliasMap: Map<string, string> = new Map();
-    const configDir = path.dirname(configPath);
 
     // Try resolve.alias block first: resolve: { alias: { '@': path.resolve(...) } }
     const resolveBlockMatch = content.match(/resolve\s*:\s*\{[^}]*alias\s*:\s*\{([^}]+)\}[^}]*\}/s);
     if (resolveBlockMatch) {
       const aliasBlockMatch = resolveBlockMatch[0].match(/alias\s*:\s*\{([^}]+)\}/s);
       if (aliasBlockMatch) {
-        this.extractAliasesFromBlock(aliasBlockMatch[1], configDir, aliasMap);
+        this.extractAliasesFromBlock(aliasBlockMatch[1], aliasMap);
       }
     }
 
     // Also try standalone alias block: alias: { '@': ... }
     const simpleMatch = content.match(/alias\s*:\s*\{([^}]+)\}/s);
     if (simpleMatch && !resolveBlockMatch) {
-      this.extractAliasesFromBlock(simpleMatch[1], configDir, aliasMap);
+      this.extractAliasesFromBlock(simpleMatch[1], aliasMap);
     }
 
     return Array.from(aliasMap.entries()).map(([alias, path]) => ({ alias, path }));
@@ -78,7 +77,7 @@ export class WebpackConfigReader implements AliasConfigReader {
    * Extract aliases from an alias block
    * Supports both path.resolve() and resolve() (imported from 'path')
    */
-  private extractAliasesFromBlock(block: string, configDir: string, aliasMap: Map<string, string>): void {
+  private extractAliasesFromBlock(block: string, aliasMap: Map<string, string>): void {
     // Match individual alias entries
     // Pattern: '@': 'value' or '@': path.resolve(...) or '@': resolve(...)
     const entryPattern = /['"]([^'"]+)['"]\s*:\s*/g;

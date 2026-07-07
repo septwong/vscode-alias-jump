@@ -23,7 +23,6 @@ export interface AliasMapping {
  */
 export interface ResolvedConfig {
   mappings: Record<string, string>;
-  rootpath: string;
   allowedsuffix: string[];
 }
 

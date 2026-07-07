@@ -23,11 +23,8 @@ class CachedConfig {
  */
 export class ConfigService {
   private cache: Map<string, CachedConfig> = new Map();
-  private context: vscode.ExtensionContext;
 
-  constructor(context: vscode.ExtensionContext) {
-    this.context = context;
-  }
+  constructor() {}
 
   /**
    * Get configuration for a workspace folder
@@ -90,7 +87,6 @@ export class ConfigService {
 
     return {
       mappings,
-      rootpath: vscodeConfig.get<string>('rootpath', 'package.json'),
       allowedsuffix: vscodeConfig.get<string[]>('allowedsuffix', ['js', 'vue', 'jsx', 'ts', 'tsx', 'svelte'])
     };
   }

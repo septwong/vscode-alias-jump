@@ -69,6 +69,7 @@ Add to your `settings.json`:
 - CSS (`.css`)
 - SCSS (`.scss`)
 - Less (`.less`)
+- Svelte (`.svelte`)
 
 ## License
 

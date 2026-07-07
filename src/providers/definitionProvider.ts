@@ -4,8 +4,7 @@ import { ConfigService } from '../services/configService';
 import {
   screeningPath,
   joiningSuffix,
-  screeningRelativePath,
-  removeComments
+  screeningRelativePath
 } from '../utils';
 
 export class AliasDefinitionProvider implements vscode.DefinitionProvider {
@@ -28,16 +27,13 @@ export class AliasDefinitionProvider implements vscode.DefinitionProvider {
     const workDir = path.dirname(fileName);
 
     // Get current line text
-    const originText = document.lineAt(position).text;
-
-    // Remove comments and adjust position
-    const { linetext, adjustedPosition } = removeComments(originText, position);
+    const linetext = document.lineAt(position).text;
 
     // Parse alias path
-    const aliasResult = screeningPath(linetext, adjustedPosition, config.mappings);
+    const aliasResult = screeningPath(linetext, position, config.mappings);
 
     // Parse relative path
-    const relativeResult = screeningRelativePath(linetext, adjustedPosition);
+    const relativeResult = screeningRelativePath(linetext, position);
 
     // Build target path (priority: alias > relative)
     let targetPath = '';
