@@ -8,7 +8,7 @@ A VS Code extension that enables navigation to alias path definitions with `Ctrl
 
 - **Alias Path Navigation**: Jump to files using path aliases (e.g., `@/components/Button`)
 - **Relative Path Support**: Also works with `./` and `../` relative paths
-- **Multi-language Support**: Works with Vue, JavaScript, TypeScript, JSX, TSX, CSS, SCSS, and Less
+- **Multi-language Support**: Works with Vue, JavaScript, TypeScript, JSX, TSX, CSS, SCSS, Less, and Svelte
 - **Auto Suffix Resolution**: Automatically resolves file extensions (`.js`, `.vue`, `.ts`, etc.)
 - **Project Root Detection**: Automatically finds project root by looking for `package.json`
 - **Performance Optimized**: Caches project root paths for faster navigation
