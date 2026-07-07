@@ -4,6 +4,12 @@ All notable changes to the "alias-jump-pro" extension will be documented in this
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.2.1] - 2026-07-07
+
+### Changed
+
+- Update Logo
+
 ## [1.2.0] - 2026-07-07
 
 ### Fixed
