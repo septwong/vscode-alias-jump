@@ -2,7 +2,7 @@
   "name": "alias-jump-pro",
   "displayName": "Alias Jump",
   "description": "%description%",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "icon": "assets/logo.png",
   "publisher": "SeptWong",
   "license": "MIT",
@@ -40,7 +40,8 @@
     "onLanguage:typescriptreact",
     "onLanguage:css",
     "onLanguage:scss",
-    "onLanguage:less"
+    "onLanguage:less",
+    "onLanguage:svelte"
   ],
   "main": "./dist/extension.js",
   "contributes": {

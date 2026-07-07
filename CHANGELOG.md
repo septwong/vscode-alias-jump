@@ -4,6 +4,20 @@ All notable changes to the "alias-jump-pro" extension will be documented in this
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.2.0] - 2026-07-07
+
+### Fixed
+
+- Greedy regex in path matching that could overflow into line comments
+- Missing `onLanguage:svelte` activation event — Svelte files now trigger the extension
+
+### Changed
+
+- Removed `removeComments` utility — no longer needed after regex fix
+- Removed unused `rootpath` configuration from internal config (setting retained for compatibility)
+- Removed unused `context` parameter from `ConfigService`
+- Removed unused `configDir` parameter from `WebpackConfigReader`
+
 ## [1.1.0] - 2026-04-02
 
 ### Added
