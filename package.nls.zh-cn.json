@@ -1,10 +1,10 @@
 {
-  "displayName": "Alias Jump",
+  "displayName": "Alias Jump Pro",
   "description": "通过 Ctrl+Click 跳转到别名路径定义。支持 @/components/Button 风格的导入路径。",
-  "configuration.title": "Alias Jump",
+  "configuration.title": "Alias Jump Pro",
   "configuration.mappings.description": "路径映射配置。键为别名，值为相对于项目根目录的路径。",
   "configuration.rootpath.description": "从当前文件向上查找最近项目根目录时使用的文件名。",
   "configuration.allowedsuffix.description": "解析无扩展名路径时尝试的文件扩展名。",
   "command.reloadConfig.title": "重新加载配置",
-  "command.category": "Alias Jump"
+  "command.category": "Alias Jump Pro"
 }
