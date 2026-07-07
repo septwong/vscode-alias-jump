@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { readers, ResolvedConfig } from '../configReaders';
 
-const DEFAULT_ALLOWED_SUFFIXES = ['js', 'vue', 'jsx', 'ts', 'tsx', 'svelte', 'css', 'scss', 'less'];
+const DEFAULT_ALLOWED_SUFFIXES = ['js', 'vue', 'jsx', 'ts', 'tsx', 'svelte', 'css', 'scss', 'less', 'nvue', 'uvue'];
 
 /**
  * Cached configuration with TTL

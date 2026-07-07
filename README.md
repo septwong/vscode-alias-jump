@@ -9,10 +9,10 @@ A VS Code extension that enables navigation to alias path definitions with `Ctrl
 - **Alias Path Navigation**: Jump to files using path aliases (e.g., `@/components/Button`)
 - **Resolved Path Hover**: Hover an alias or relative path to see the resolved file path
 - **Relative Path Support**: Also works with `./` and `../` relative paths
-- **Multi-language Support**: Works with Vue, JavaScript, TypeScript, JSX, TSX, CSS, SCSS, Less, and Svelte
+- **Multi-language Support**: Works with Vue, JavaScript, TypeScript, JSX, TSX, CSS, SCSS, Less, Svelte, and uni-app (`.nvue`, `.uvue`)
 - **Automatic Config Detection**: Reads aliases from VS Code settings, Vite, Webpack, `tsconfig.json`, and `jsconfig.json`
 - **tsconfig/jsconfig Extends Support**: Reads aliases inherited from extended config files
-- **Auto Suffix Resolution**: Automatically resolves file extensions (`.js`, `.vue`, `.ts`, `.css`, `.scss`, `.less`, etc.)
+- **Auto Suffix Resolution**: Automatically resolves file extensions (`.js`, `.vue`, `.ts`, `.css`, `.scss`, `.less`, `.nvue`, `.uvue`, etc.)
 - **Nested Project Root Detection**: Finds the closest configured root marker, useful for monorepos
 - **Performance Optimized**: Caches resolved project configs for faster navigation
 
@@ -45,7 +45,7 @@ This extension contributes the following settings:
 |---------|------|---------|-------------|
 | `alias-jump-pro.mappings` | object | `{ "@": "/src" }` | Path mappings. Key is the alias, value is the path relative to project root. |
 | `alias-jump-pro.rootpath` | string | `"package.json"` | File name used to find the closest project root from the current file. |
-| `alias-jump-pro.allowedsuffix` | array | `["js", "vue", "jsx", "ts", "tsx", "svelte", "css", "scss", "less"]` | File extensions used when resolving paths without an extension. |
+| `alias-jump-pro.allowedsuffix` | array | `["js", "vue", "jsx", "ts", "tsx", "svelte", "css", "scss", "less", "nvue", "uvue"]` | File extensions used when resolving paths without an extension. |
 
 ### Configuration Example
 
@@ -59,7 +59,7 @@ Add to your `settings.json`:
     "@utils": "src/utils",
     "@assets": "src/assets"
   },
-  "alias-jump-pro.allowedsuffix": ["js", "vue", "jsx", "ts", "tsx", "svelte", "css", "scss", "less"]
+  "alias-jump-pro.allowedsuffix": ["js", "vue", "jsx", "ts", "tsx", "svelte", "css", "scss", "less", "nvue", "uvue"]
 }
 ```
 
@@ -72,6 +72,8 @@ Alias Jump uses the following priority order:
 3. Webpack `resolve.alias`
 4. `tsconfig.json` / `jsconfig.json` `compilerOptions.paths`, including local `extends` chains
 5. Fallback `{ "@": "src" }`
+
+> **uni-app**: The extension automatically detects uni-app projects by `pages.json`. For HBuilderX and Vue CLI created projects (which have built-in `@` → `src`), the fallback mapping takes effect automatically. For Vite created projects, the extension reads `resolve.alias` from `vite.config.ts` if configured; otherwise falls back to `{ "@": "src" }`. `.nvue` and `.uvue` files are fully supported.
 
 ## Commands
 
@@ -90,6 +92,7 @@ Alias Jump uses the following priority order:
 - SCSS (`.scss`)
 - Less (`.less`)
 - Svelte (`.svelte`)
+- uni-app (`.nvue`, `.uvue`)
 
 ## License
 

@@ -23,7 +23,8 @@ export class FileWatcherService {
       '**/jsconfig.json',
       '**/vite.config.{js,ts,mjs}',
       '**/webpack.config.{js,ts}',
-      '**/webpack.common.{js,ts}'
+      '**/webpack.common.{js,ts}',
+      '**/pages.json'
     ];
 
     for (const pattern of configPatterns) {

@@ -9,10 +9,10 @@
 - **别名路径跳转**：通过路径别名跳转到文件（例如 `@/components/Button`）
 - **真实路径悬停提示**：鼠标悬停在别名或相对路径上时显示解析后的文件路径
 - **相对路径支持**：同时支持 `./` 和 `../` 相对路径
-- **多语言支持**：支持 Vue、JavaScript、TypeScript、JSX、TSX、CSS、SCSS、Less 和 Svelte
+- **多语言支持**：支持 Vue、JavaScript、TypeScript、JSX、TSX、CSS、SCSS、Less、Svelte 和 uni-app（`.nvue`、`.uvue`）
 - **自动配置识别**：自动读取 VS Code settings、Vite、Webpack、`tsconfig.json` 和 `jsconfig.json`
 - **tsconfig/jsconfig extends 支持**：读取继承配置文件中的别名
-- **自动后缀解析**：自动解析文件扩展名（`.js`、`.vue`、`.ts`、`.css`、`.scss`、`.less` 等）
+- **自动后缀解析**：自动解析文件扩展名（`.js`、`.vue`、`.ts`、`.css`、`.scss`、`.less`、`.nvue`、`.uvue` 等）
 - **嵌套项目根目录检测**：从当前文件向上查找最近的项目根标记，适合 monorepo
 - **性能优化**：缓存已解析的项目配置以加快导航速度
 
@@ -45,7 +45,7 @@ import { utils } from '@/utils'           // Ctrl+Click 跳转
 |------|------|--------|------|
 | `alias-jump-pro.mappings` | object | `{ "@": "/src" }` | 路径映射。键为别名，值为相对于项目根目录的路径。 |
 | `alias-jump-pro.rootpath` | string | `"package.json"` | 从当前文件向上查找最近项目根目录时使用的文件名。 |
-| `alias-jump-pro.allowedsuffix` | array | `["js", "vue", "jsx", "ts", "tsx", "svelte", "css", "scss", "less"]` | 解析无扩展名路径时尝试的文件扩展名。 |
+| `alias-jump-pro.allowedsuffix` | array | `["js", "vue", "jsx", "ts", "tsx", "svelte", "css", "scss", "less", "nvue", "uvue"]` | 解析无扩展名路径时尝试的文件扩展名。 |
 
 ### 配置示例
 
@@ -59,7 +59,7 @@ import { utils } from '@/utils'           // Ctrl+Click 跳转
     "@utils": "src/utils",
     "@assets": "src/assets"
   },
-  "alias-jump-pro.allowedsuffix": ["js", "vue", "jsx", "ts", "tsx", "svelte", "css", "scss", "less"]
+  "alias-jump-pro.allowedsuffix": ["js", "vue", "jsx", "ts", "tsx", "svelte", "css", "scss", "less", "nvue", "uvue"]
 }
 ```
 
@@ -72,6 +72,8 @@ Alias Jump 按以下优先级读取别名：
 3. Webpack `resolve.alias`
 4. `tsconfig.json` / `jsconfig.json` 的 `compilerOptions.paths`，包含本地 `extends` 继承链
 5. 兜底配置 `{ "@": "src" }`
+
+> **uni-app**：扩展会自动检测 `pages.json` 来识别 uni-app 项目。HBuilderX 和 Vue CLI 创建的项目（内置 `@` → `src`）会自动应用兜底映射；Vite 创建的项目会读取 `vite.config.ts` 中的 `resolve.alias`（如已配置），否则回退到 `{ "@": "src" }`。`.nvue` 和 `.uvue` 文件已得到完整支持。
 
 ## 命令
 
@@ -90,6 +92,7 @@ Alias Jump 按以下优先级读取别名：
 - SCSS (`.scss`)
 - Less (`.less`)
 - Svelte (`.svelte`)
+- uni-app (`.nvue`、`.uvue`)
 
 ## 许可证
 

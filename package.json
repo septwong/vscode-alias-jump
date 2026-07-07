@@ -41,7 +41,9 @@
     "onLanguage:css",
     "onLanguage:scss",
     "onLanguage:less",
-    "onLanguage:svelte"
+    "onLanguage:svelte",
+    "onLanguage:nvue",
+    "onLanguage:uvue"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -71,7 +73,9 @@
             "svelte",
             "css",
             "scss",
-            "less"
+            "less",
+            "nvue",
+            "uvue"
           ],
           "description": "%configuration.allowedsuffix.description%"
         }
