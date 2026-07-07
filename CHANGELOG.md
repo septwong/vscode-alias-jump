@@ -21,9 +21,11 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Added
 
+- Hover provider showing the resolved absolute file path for alias and relative imports.
+- Local `tsconfig.json` / `jsconfig.json` `extends` chain support.
 - Backtick import path support.
 - Unquoted CSS `url(@/...)` path support.
-- Unit coverage for path parsing, suffix resolution, config readers, and nested project root detection.
+- Unit coverage for path parsing, suffix resolution, config readers, tsconfig extends, and nested project root detection.
 
 ## [1.1.0] - 2026-04-02
 

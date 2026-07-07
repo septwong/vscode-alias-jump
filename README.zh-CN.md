@@ -7,9 +7,11 @@
 ## 功能特性
 
 - **别名路径跳转**：通过路径别名跳转到文件（例如 `@/components/Button`）
+- **真实路径悬停提示**：鼠标悬停在别名或相对路径上时显示解析后的文件路径
 - **相对路径支持**：同时支持 `./` 和 `../` 相对路径
 - **多语言支持**：支持 Vue、JavaScript、TypeScript、JSX、TSX、CSS、SCSS、Less 和 Svelte
 - **自动配置识别**：自动读取 VS Code settings、Vite、Webpack、`tsconfig.json` 和 `jsconfig.json`
+- **tsconfig/jsconfig extends 支持**：读取继承配置文件中的别名
 - **自动后缀解析**：自动解析文件扩展名（`.js`、`.vue`、`.ts`、`.css`、`.scss`、`.less` 等）
 - **嵌套项目根目录检测**：从当前文件向上查找最近的项目根标记，适合 monorepo
 - **性能优化**：缓存已解析的项目配置以加快导航速度
@@ -19,6 +21,7 @@
 1. 在 VS Code settings、Vite、Webpack、`tsconfig.json` 或 `jsconfig.json` 中配置路径别名
 2. 按住 `Ctrl`（macOS 上为 `Cmd`）并点击别名路径
 3. 编辑器将跳转到目标文件
+4. 鼠标悬停在同一路径上可查看解析后的绝对文件路径
 
 ### 示例
 
@@ -67,7 +70,7 @@ Alias Jump 按以下优先级读取别名：
 1. VS Code 设置 `alias-jump-pro.mappings`
 2. Vite `resolve.alias`
 3. Webpack `resolve.alias`
-4. `tsconfig.json` / `jsconfig.json` 的 `compilerOptions.paths`
+4. `tsconfig.json` / `jsconfig.json` 的 `compilerOptions.paths`，包含本地 `extends` 继承链
 5. 兜底配置 `{ "@": "src" }`
 
 ## 命令

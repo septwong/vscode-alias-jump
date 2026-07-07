@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { AliasDefinitionProvider } from './providers/definitionProvider';
+import { AliasHoverProvider } from './providers/hoverProvider';
 import { ConfigService } from './services/configService';
 import { FileWatcherService } from './services/fileWatcherService';
 
@@ -26,15 +27,20 @@ export function activate(context: vscode.ExtensionContext) {
     { scheme: 'file', language: 'svelte' }
   ];
 
-  // Register DefinitionProvider with services
+  // Register providers with services
   const definitionProvider = new AliasDefinitionProvider(configService);
+  const hoverProvider = new AliasHoverProvider(configService);
 
-  const disposable = vscode.languages.registerDefinitionProvider(
+  const definitionDisposable = vscode.languages.registerDefinitionProvider(
     languages,
     definitionProvider
   );
+  const hoverDisposable = vscode.languages.registerHoverProvider(
+    languages,
+    hoverProvider
+  );
 
-  context.subscriptions.push(disposable);
+  context.subscriptions.push(definitionDisposable, hoverDisposable);
 
   // Register reload config command
   const reloadCommand = vscode.commands.registerCommand('alias-jump-pro.reloadConfig', () => {

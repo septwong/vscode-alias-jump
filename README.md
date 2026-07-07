@@ -7,9 +7,11 @@ A VS Code extension that enables navigation to alias path definitions with `Ctrl
 ## Features
 
 - **Alias Path Navigation**: Jump to files using path aliases (e.g., `@/components/Button`)
+- **Resolved Path Hover**: Hover an alias or relative path to see the resolved file path
 - **Relative Path Support**: Also works with `./` and `../` relative paths
 - **Multi-language Support**: Works with Vue, JavaScript, TypeScript, JSX, TSX, CSS, SCSS, Less, and Svelte
 - **Automatic Config Detection**: Reads aliases from VS Code settings, Vite, Webpack, `tsconfig.json`, and `jsconfig.json`
+- **tsconfig/jsconfig Extends Support**: Reads aliases inherited from extended config files
 - **Auto Suffix Resolution**: Automatically resolves file extensions (`.js`, `.vue`, `.ts`, `.css`, `.scss`, `.less`, etc.)
 - **Nested Project Root Detection**: Finds the closest configured root marker, useful for monorepos
 - **Performance Optimized**: Caches resolved project configs for faster navigation
@@ -19,6 +21,7 @@ A VS Code extension that enables navigation to alias path definitions with `Ctrl
 1. Use aliases in VS Code settings, Vite, Webpack, `tsconfig.json`, or `jsconfig.json`
 2. Hold `Ctrl` (or `Cmd` on macOS) and click on an alias path
 3. The editor will navigate to the target file
+4. Hover the same path to inspect the resolved absolute file path
 
 ### Example
 
@@ -67,7 +70,7 @@ Alias Jump uses the following priority order:
 1. VS Code setting `alias-jump-pro.mappings`
 2. Vite `resolve.alias`
 3. Webpack `resolve.alias`
-4. `tsconfig.json` / `jsconfig.json` `compilerOptions.paths`
+4. `tsconfig.json` / `jsconfig.json` `compilerOptions.paths`, including local `extends` chains
 5. Fallback `{ "@": "src" }`
 
 ## Commands

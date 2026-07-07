@@ -112,6 +112,46 @@ suite('Config readers', () => {
     }
   });
 
+  test('merges tsconfig extends chain and lets child paths override parent paths', async () => {
+    const projectRoot = createTempProject();
+    try {
+      writeFile(path.join(projectRoot, 'tsconfig.base.json'), JSON.stringify({
+        compilerOptions: {
+          baseUrl: '.',
+          paths: {
+            '@/*': ['src/base/*'],
+            '~/*': ['shared/*']
+          }
+        }
+      }));
+      writeFile(path.join(projectRoot, 'packages/app/tsconfig.json'), JSON.stringify({
+        extends: '../../tsconfig.base',
+        compilerOptions: {
+          baseUrl: '.',
+          paths: {
+            '@/*': ['src/*'],
+            '#/*': ['types/*']
+          }
+        }
+      }));
+
+      const appRoot = path.join(projectRoot, 'packages/app');
+      const context: ConfigReaderContext = {
+        workspaceFolder: createWorkspaceFolder(projectRoot),
+        projectRoot: appRoot
+      };
+      const aliases = await new TsConfigReader().readAliases(context);
+
+      assert.deepStrictEqual(aliases, [
+        { alias: '@', path: 'src' },
+        { alias: '~', path: path.join('../..', 'shared') },
+        { alias: '#', path: 'types' }
+      ]);
+    } finally {
+      fs.rmSync(projectRoot, { recursive: true, force: true });
+    }
+  });
+
   test('reads vite object and array alias formats', async () => {
     const projectRoot = createTempProject();
     try {

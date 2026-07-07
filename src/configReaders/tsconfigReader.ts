@@ -40,47 +40,80 @@ export class TsConfigReader implements AliasConfigReader {
       return [];
     }
 
-    return this.parsePaths(configContent, configPath);
+    return this.parseConfig(configContent, configPath, context.projectRoot);
   }
 
   /**
    * Parse compilerOptions.paths from tsconfig/jsconfig
    * Handles patterns like "@/*": ["src/*"]
    */
-  private parsePaths(content: string, configPath: string): AliasMapping[] {
-    const aliases: AliasMapping[] = [];
+  private parseConfig(content: string, configPath: string, projectRoot: string): AliasMapping[] {
+    const aliasesByKey = new Map<string, string>();
+    const visited = new Set<string>();
 
-    try {
-      // Use jsonc-parser to properly parse JSON with comments
-      const config = jsonc.parse(content);
+    const visitConfig = (currentContent: string, currentPath: string): void => {
+      const normalizedPath = path.normalize(currentPath);
+      if (visited.has(normalizedPath)) {
+        return;
+      }
+      visited.add(normalizedPath);
 
-      const compilerOptions = config.compilerOptions || {};
-      const paths = compilerOptions.paths || {};
-      const baseUrl = compilerOptions.baseUrl || '';
+      try {
+        // Use jsonc-parser to properly parse JSON with comments
+        const config = jsonc.parse(currentContent);
 
-      for (const [pattern, pathList] of Object.entries(paths) as [string, string[]][]) {
-        // Strip wildcard from pattern: "@/*" -> "@"
-        const alias = pattern.replace(/\/?\*$/, '');
-
-        // Get the first path from the list and strip wildcard
-        let mappedPath = pathList[0] || '';
-        mappedPath = mappedPath.replace(/\/?\*$/, '');
-
-        // Resolve relative to baseUrl if specified
-        if (baseUrl && !path.isAbsolute(mappedPath)) {
-          mappedPath = path.join(baseUrl, mappedPath);
+        const extendsPath = this.resolveExtendsPath(config.extends, currentPath);
+        if (extendsPath && fs.existsSync(extendsPath)) {
+          visitConfig(fs.readFileSync(extendsPath, 'utf-8'), extendsPath);
         }
 
-        // Normalize path (remove leading ./ or /)
-        mappedPath = mappedPath.replace(/^\.?\//, '');
+        const compilerOptions = config.compilerOptions || {};
+        const paths = compilerOptions.paths || {};
+        const baseUrl = compilerOptions.baseUrl || '';
+        const configDir = path.dirname(currentPath);
 
-        aliases.push({ alias, path: mappedPath });
+        for (const [pattern, pathList] of Object.entries(paths) as [string, string[]][]) {
+          // Strip wildcard from pattern: "@/*" -> "@"
+          const alias = pattern.replace(/\/?\*$/, '');
+
+          // Get the first path from the list and strip wildcard
+          let mappedPath = pathList[0] || '';
+          mappedPath = mappedPath.replace(/\/?\*$/, '');
+
+          const baseDir = baseUrl
+            ? path.resolve(configDir, baseUrl)
+            : configDir;
+          const absoluteMappedPath = path.isAbsolute(mappedPath)
+            ? mappedPath
+            : path.resolve(baseDir, mappedPath);
+          const projectRelativePath = path.relative(projectRoot, absoluteMappedPath);
+
+          aliasesByKey.set(alias, projectRelativePath || '.');
+        }
+      } catch (e) {
+        // Failed to parse config, keep aliases from other configs.
+        console.error(`Failed to parse ${currentPath}:`, e);
       }
-    } catch (e) {
-      // Failed to parse config, return empty
-      console.error(`Failed to parse ${configPath}:`, e);
+    };
+
+    visitConfig(content, configPath);
+
+    return Array.from(aliasesByKey, ([alias, path]) => ({ alias, path }));
+  }
+
+  private resolveExtendsPath(extendsValue: unknown, configPath: string): string | undefined {
+    if (typeof extendsValue !== 'string' || !extendsValue) {
+      return undefined;
     }
 
-    return aliases;
+    const configDir = path.dirname(configPath);
+    const candidate = path.isAbsolute(extendsValue)
+      ? extendsValue
+      : path.resolve(configDir, extendsValue);
+    const candidates = candidate.endsWith('.json')
+      ? [candidate]
+      : [candidate, `${candidate}.json`, path.join(candidate, 'tsconfig.json')];
+
+    return candidates.find(filePath => fs.existsSync(filePath));
   }
 }
