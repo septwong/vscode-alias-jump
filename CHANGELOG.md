@@ -8,15 +8,22 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Fixed
 
-- Greedy regex in path matching that could overflow into line comments
-- Missing `onLanguage:svelte` activation event — Svelte files now trigger the extension
+- Path matching now uses the path token under the cursor instead of the first quoted string on the line.
+- Missing Svelte definition provider registration.
+- `esbuild.js` no longer throws a secondary error when an esbuild error has no location.
 
 ### Changed
 
-- Removed `removeComments` utility — no longer needed after regex fix
-- Removed unused `rootpath` configuration from internal config (setting retained for compatibility)
-- Removed unused `context` parameter from `ConfigService`
-- Removed unused `configDir` parameter from `WebpackConfigReader`
+- `alias-jump-pro.rootpath` now finds the closest project root from the current file, improving monorepo support.
+- Config readers now resolve aliases from the detected project root.
+- Default suffix resolution now includes `css`, `scss`, and `less`.
+- Chinese README is included in the packaged extension.
+
+### Added
+
+- Backtick import path support.
+- Unquoted CSS `url(@/...)` path support.
+- Unit coverage for path parsing, suffix resolution, config readers, and nested project root detection.
 
 ## [1.1.0] - 2026-04-02
 

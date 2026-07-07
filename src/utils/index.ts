@@ -14,6 +14,43 @@ export interface RelativePathResult {
   columns: [number, number];
 }
 
+interface PathToken {
+  text: string;
+  columns: [number, number];
+}
+
+function findPathTokenAtPosition(linetext: string, position: vscode.Position): PathToken | null {
+  const character = position.character;
+  const quotedTokenPattern = /(['"`])([^'"`]*)\1/g;
+  let match: RegExpExecArray | null;
+
+  while ((match = quotedTokenPattern.exec(linetext)) !== null) {
+    const start = match.index + 1;
+    const end = start + match[2].length;
+    if (character >= start && character <= end) {
+      return {
+        text: match[2],
+        columns: [start, end]
+      };
+    }
+  }
+
+  const unquotedUrlPattern = /url\(\s*([^'"`\s)][^)]*?)\s*\)/g;
+  while ((match = unquotedUrlPattern.exec(linetext)) !== null) {
+    const text = match[1].trim();
+    const start = linetext.indexOf(match[1], match.index);
+    const end = start + text.length;
+    if (character >= start && character <= end) {
+      return {
+        text,
+        columns: [start, end]
+      };
+    }
+  }
+
+  return null;
+}
+
 /**
  * Parse alias path from line text
  * Supports both '@' and '@/' format aliases
@@ -21,39 +58,34 @@ export interface RelativePathResult {
  * Output: { path: 'src/components/Button', rang: Range, columns: [14, 34] }
  */
 export function screeningPath(linetext: string, position: vscode.Position, mappings: Record<string, string>): PathResult | null {
-  // Match quoted strings
-  const arr = linetext.match(/('[^']+')|("[^"]+")/);
-  if (!arr) {
+  const token = findPathTokenAtPosition(linetext, position);
+  if (!token) {
     return null;
   }
 
-  // Remove quotes
-  const text = arr[0].substring(1, arr[0].length - 1);
-  const i = linetext.indexOf(text);
-  const columns: [number, number] = [i, i + text.length];
+  const { text, columns } = token;
 
   // Find matching alias key
   // Try both formats: '@' and '@/' (with trailing slash)
-  for (const key of Object.keys(mappings)) {
-    const keyWithSlash = key.endsWith('/') ? key : key + '/';
+  const aliases = Object.keys(mappings).sort((a, b) => b.length - a.length);
+  for (const key of aliases) {
+    const keyWithoutSlash = key.endsWith('/') ? key.slice(0, -1) : key;
+    const keyWithSlash = key.endsWith('/') ? key : `${key}/`;
 
     // Check if path starts with alias (with or without trailing slash)
-    if (text === key || text.startsWith(keyWithSlash)) {
+    if (text === keyWithoutSlash || text.startsWith(keyWithSlash)) {
       let mappedPath = mappings[key];
       // Remove leading '/' if present
-      if (mappedPath[0] === '/') {
+      if (mappedPath[0] === '/' && !fs.existsSync(mappedPath)) {
         mappedPath = mappedPath.substring(1);
       }
 
       // Get the rest of the path after the alias
       let restPath: string;
-      if (text === key) {
+      if (text === keyWithoutSlash) {
         restPath = '';
-      } else if (text.startsWith(keyWithSlash)) {
-        restPath = text.substring(keyWithSlash.length);
       } else {
-        // text starts with key (no slash), e.g. '@components' when key is '@'
-        restPath = text.substring(key.length);
+        restPath = text.substring(keyWithSlash.length);
       }
 
       return {
@@ -103,24 +135,21 @@ export function joiningSuffix(targetPath: string, allowedsuffix: string[]): stri
  * Parse relative path (./ or ../) from line text
  */
 export function screeningRelativePath(linetext: string, position: vscode.Position): RelativePathResult | null {
-  const arr = linetext.match(/('[^']+')|("[^"]+")/);
-  if (!arr) {
+  const token = findPathTokenAtPosition(linetext, position);
+  if (!token) {
     return null;
   }
 
-  const text = arr[0].substring(1, arr[0].length - 1);
+  const { text, columns } = token;
 
   // Only process relative paths
   if (!text.startsWith('./') && !text.startsWith('../')) {
     return null;
   }
 
-  const i = linetext.indexOf(text);
-  const columns: [number, number] = [i, i + text.length];
-
   return {
     text,
-    rang: new vscode.Range(position.line, i, position.line, i + text.length),
+    rang: new vscode.Range(position.line, columns[0], position.line, columns[1]),
     columns
   };
 }

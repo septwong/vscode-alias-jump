@@ -22,7 +22,7 @@ export class AliasDefinitionProvider implements vscode.DefinitionProvider {
     }
 
     // Get config for this workspace
-    const config = await this.configService.getConfig(workspaceFolder);
+    const config = await this.configService.getConfig(workspaceFolder, document.uri);
     const fileName = document.fileName;
     const workDir = path.dirname(fileName);
 
@@ -40,9 +40,7 @@ export class AliasDefinitionProvider implements vscode.DefinitionProvider {
     let target: { rang: vscode.Range } | null = null;
 
     if (aliasResult) {
-      // Use workspace folder path as root
-      const projectRoot = workspaceFolder.uri.fsPath;
-      targetPath = path.resolve(projectRoot, aliasResult.path);
+      targetPath = path.resolve(config.projectRoot, aliasResult.path);
       target = aliasResult;
     } else if (relativeResult) {
       targetPath = path.resolve(workDir, relativeResult.text);

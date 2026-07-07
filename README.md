@@ -9,22 +9,29 @@ A VS Code extension that enables navigation to alias path definitions with `Ctrl
 - **Alias Path Navigation**: Jump to files using path aliases (e.g., `@/components/Button`)
 - **Relative Path Support**: Also works with `./` and `../` relative paths
 - **Multi-language Support**: Works with Vue, JavaScript, TypeScript, JSX, TSX, CSS, SCSS, Less, and Svelte
-- **Auto Suffix Resolution**: Automatically resolves file extensions (`.js`, `.vue`, `.ts`, etc.)
-- **Project Root Detection**: Automatically finds project root by looking for `package.json`
-- **Performance Optimized**: Caches project root paths for faster navigation
+- **Automatic Config Detection**: Reads aliases from VS Code settings, Vite, Webpack, `tsconfig.json`, and `jsconfig.json`
+- **Auto Suffix Resolution**: Automatically resolves file extensions (`.js`, `.vue`, `.ts`, `.css`, `.scss`, `.less`, etc.)
+- **Nested Project Root Detection**: Finds the closest configured root marker, useful for monorepos
+- **Performance Optimized**: Caches resolved project configs for faster navigation
 
 ## Usage
 
-1. Configure your path aliases in VS Code settings
+1. Use aliases in VS Code settings, Vite, Webpack, `tsconfig.json`, or `jsconfig.json`
 2. Hold `Ctrl` (or `Cmd` on macOS) and click on an alias path
 3. The editor will navigate to the target file
 
 ### Example
 
 ```javascript
-// With alias configured as { "@": "/src" }
+// With alias configured as { "@": "src" }
 import Button from '@/components/Button'  // Ctrl+Click to navigate
 import { utils } from '@/utils'           // Ctrl+Click to navigate
+```
+
+```scss
+.logo {
+  background-image: url(@/assets/logo);
+}
 ```
 
 ## Extension Settings
@@ -34,8 +41,8 @@ This extension contributes the following settings:
 | Setting | Type | Default | Description |
 |---------|------|---------|-------------|
 | `alias-jump-pro.mappings` | object | `{ "@": "/src" }` | Path mappings. Key is the alias, value is the path relative to project root. |
-| `alias-jump-pro.rootpath` | string | `"package.json"` | File name used to identify the project root directory. |
-| `alias-jump-pro.allowedsuffix` | array | `["js", "vue", "jsx", "ts", "tsx", "svelte"]` | Allowed file extensions for auto-completion. |
+| `alias-jump-pro.rootpath` | string | `"package.json"` | File name used to find the closest project root from the current file. |
+| `alias-jump-pro.allowedsuffix` | array | `["js", "vue", "jsx", "ts", "tsx", "svelte", "css", "scss", "less"]` | File extensions used when resolving paths without an extension. |
 
 ### Configuration Example
 
@@ -44,14 +51,24 @@ Add to your `settings.json`:
 ```json
 {
   "alias-jump-pro.mappings": {
-    "@": "/src",
-    "@components": "/src/components",
-    "@utils": "/src/utils",
-    "@assets": "/src/assets"
+    "@": "src",
+    "@components": "src/components",
+    "@utils": "src/utils",
+    "@assets": "src/assets"
   },
-  "alias-jump-pro.allowedsuffix": ["js", "vue", "jsx", "ts", "tsx", "svelte"]
+  "alias-jump-pro.allowedsuffix": ["js", "vue", "jsx", "ts", "tsx", "svelte", "css", "scss", "less"]
 }
 ```
+
+### Automatic Config Sources
+
+Alias Jump uses the following priority order:
+
+1. VS Code setting `alias-jump-pro.mappings`
+2. Vite `resolve.alias`
+3. Webpack `resolve.alias`
+4. `tsconfig.json` / `jsconfig.json` `compilerOptions.paths`
+5. Fallback `{ "@": "src" }`
 
 ## Commands
 

@@ -6,8 +6,16 @@ import * as vscode from 'vscode';
 export interface AliasConfigReader {
   name: string;
   priority: number; // Higher = higher priority
-  canRead(workspaceFolder: vscode.WorkspaceFolder): Promise<boolean>;
-  readAliases(workspaceFolder: vscode.WorkspaceFolder): Promise<AliasMapping[]>;
+  canRead(context: ConfigReaderContext): Promise<boolean>;
+  readAliases(context: ConfigReaderContext): Promise<AliasMapping[]>;
+}
+
+/**
+ * Context shared by all config readers.
+ */
+export interface ConfigReaderContext {
+  workspaceFolder: vscode.WorkspaceFolder;
+  projectRoot: string;
 }
 
 /**
@@ -22,6 +30,7 @@ export interface AliasMapping {
  * Resolved configuration for a workspace
  */
 export interface ResolvedConfig {
+  projectRoot: string;
   mappings: Record<string, string>;
   allowedsuffix: string[];
 }

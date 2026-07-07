@@ -1,8 +1,7 @@
-import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as jsonc from 'jsonc-parser';
-import { AliasConfigReader, AliasMapping } from './types';
+import { AliasConfigReader, AliasMapping, ConfigReaderContext } from './types';
 
 /**
  * Reader for tsconfig.json and jsconfig.json
@@ -14,15 +13,15 @@ export class TsConfigReader implements AliasConfigReader {
 
   private configFiles = ['tsconfig.json', 'jsconfig.json'];
 
-  async canRead(workspaceFolder: vscode.WorkspaceFolder): Promise<boolean> {
-    const workspacePath = workspaceFolder.uri.fsPath;
+  async canRead(context: ConfigReaderContext): Promise<boolean> {
+    const workspacePath = context.projectRoot;
     return this.configFiles.some(file =>
       fs.existsSync(path.join(workspacePath, file))
     );
   }
 
-  async readAliases(workspaceFolder: vscode.WorkspaceFolder): Promise<AliasMapping[]> {
-    const workspacePath = workspaceFolder.uri.fsPath;
+  async readAliases(context: ConfigReaderContext): Promise<AliasMapping[]> {
+    const workspacePath = context.projectRoot;
 
     // Find the first existing config file
     let configPath: string | undefined;

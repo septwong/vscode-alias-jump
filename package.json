@@ -68,7 +68,10 @@
             "jsx",
             "ts",
             "tsx",
-            "svelte"
+            "svelte",
+            "css",
+            "scss",
+            "less"
           ],
           "description": "%configuration.allowedsuffix.description%"
         }
