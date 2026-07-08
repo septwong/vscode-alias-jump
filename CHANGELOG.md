@@ -4,6 +4,15 @@ All notable changes to the "alias-jump-pro" extension will be documented in this
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.3.0] - 2026-07-08
+
+### Added
+
+- uni-app support: detect `pages.json`, automatically resolve `@` → `src/` or project root
+- `UniAppConfigReader`: smart alias mapping based on `src/` directory existence
+- `.nvue` / `.uvue` file support in activation events and suffix resolution
+- Watch `pages.json` changes for cache invalidation
+
 ## [1.2.1] - 2026-07-07
 
 ### Changed
