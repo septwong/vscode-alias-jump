@@ -38,4 +38,4 @@ export interface ResolvedConfig {
 /**
  * Config source type
  */
-export type ConfigSource = 'vscode-settings' | 'vite-config' | 'webpack-config' | 'tsconfig' | 'jsconfig';
+export type ConfigSource = 'vscode-settings' | 'vite-config' | 'webpack-config' | 'tsconfig' | 'jsconfig' | 'uniapp';

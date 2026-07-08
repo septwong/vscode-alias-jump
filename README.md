@@ -71,9 +71,10 @@ Alias Jump uses the following priority order:
 2. Vite `resolve.alias`
 3. Webpack `resolve.alias`
 4. `tsconfig.json` / `jsconfig.json` `compilerOptions.paths`, including local `extends` chains
-5. Fallback `{ "@": "src" }`
+5. uni-app `pages.json` (detects `src/` directory to determine mapping)
+6. Fallback `{ "@": "src" }`
 
-> **uni-app**: The extension automatically detects uni-app projects by `pages.json`. For HBuilderX and Vue CLI created projects (which have built-in `@` → `src`), the fallback mapping takes effect automatically. For Vite created projects, the extension reads `resolve.alias` from `vite.config.ts` if configured; otherwise falls back to `{ "@": "src" }`. `.nvue` and `.uvue` files are fully supported.
+> **uni-app**: The extension automatically detects uni-app projects by `pages.json`. If `src/` directory exists, maps `@` → `src`; otherwise maps `@` → project root. This covers HBuilderX, Vue CLI, and Vite created projects. `.nvue` and `.uvue` files are fully supported.
 
 ## Commands
 

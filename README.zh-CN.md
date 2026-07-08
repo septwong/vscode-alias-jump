@@ -71,9 +71,10 @@ Alias Jump 按以下优先级读取别名：
 2. Vite `resolve.alias`
 3. Webpack `resolve.alias`
 4. `tsconfig.json` / `jsconfig.json` 的 `compilerOptions.paths`，包含本地 `extends` 继承链
-5. 兜底配置 `{ "@": "src" }`
+5. uni-app `pages.json`（检测 `src/` 目录来决定映射关系）
+6. 兜底配置 `{ "@": "src" }`
 
-> **uni-app**：扩展会自动检测 `pages.json` 来识别 uni-app 项目。HBuilderX 和 Vue CLI 创建的项目（内置 `@` → `src`）会自动应用兜底映射；Vite 创建的项目会读取 `vite.config.ts` 中的 `resolve.alias`（如已配置），否则回退到 `{ "@": "src" }`。`.nvue` 和 `.uvue` 文件已得到完整支持。
+> **uni-app**：扩展通过 `pages.json` 自动识别 uni-app 项目。若存在 `src/` 目录则映射 `@` → `src`，否则映射 `@` → 项目根目录。兼容 HBuilderX、Vue CLI、Vite 三种创建方式。`.nvue` 和 `.uvue` 文件已得到完整支持。
 
 ## 命令
 

@@ -3,6 +3,7 @@ import { VSCodeSettingsReader } from './vscodeSettingsReader';
 import { TsConfigReader } from './tsconfigReader';
 import { ViteConfigReader } from './viteConfigReader';
 import { WebpackConfigReader } from './webpackConfigReader';
+import { UniAppConfigReader } from './uniAppConfigReader';
 
 // Registry of all readers, sorted by priority (highest first)
 export const readers: AliasConfigReader[] = [
@@ -10,6 +11,7 @@ export const readers: AliasConfigReader[] = [
   new ViteConfigReader(), // priority: 15
   new WebpackConfigReader(), // priority: 15
   new TsConfigReader(), // priority: 10
+  new UniAppConfigReader(), // priority: 5
 ].sort((a, b) => b.priority - a.priority);
 
 export { AliasConfigReader, AliasMapping, ResolvedConfig } from './types';
