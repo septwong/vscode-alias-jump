@@ -8,7 +8,7 @@ let configService: ConfigService;
 let fileWatcherService: FileWatcherService;
 
 export function activate(context: vscode.ExtensionContext) {
-  console.log('Alias Jump extension is now active!');
+  console.log('Alias Jump Pro extension is now active!');
 
   // Initialize services
   configService = new ConfigService();
@@ -47,7 +47,7 @@ export function activate(context: vscode.ExtensionContext) {
   // Register reload config command
   const reloadCommand = vscode.commands.registerCommand('alias-jump-pro.reloadConfig', () => {
     configService.clearAllCaches();
-    vscode.window.showInformationMessage('Alias Jump configuration reloaded!');
+    vscode.window.showInformationMessage('Alias Jump Pro configuration reloaded!');
   });
 
   context.subscriptions.push(reloadCommand);
@@ -62,7 +62,7 @@ export function activate(context: vscode.ExtensionContext) {
     const config = await configService.getConfig(workspaceFolder);
     const msg = `Project root: ${config.projectRoot}\nMappings: ${JSON.stringify(config.mappings, null, 2)}\nAllowed suffixes: [${config.allowedsuffix.join(', ')}]`;
     vscode.window.showInformationMessage(msg);
-    console.log('[Alias Jump] Config:', msg);
+    console.log('[Alias Jump Pro] Config:', msg);
   });
 
   context.subscriptions.push(showConfigCommand);

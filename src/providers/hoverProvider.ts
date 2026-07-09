@@ -47,7 +47,7 @@ export class AliasHoverProvider implements vscode.HoverProvider {
     }
 
     const markdown = new vscode.MarkdownString();
-    markdown.appendMarkdown('**Alias Jump**  \n');
+    markdown.appendMarkdown('**Alias Jump Pro**  \n');
     markdown.appendCodeblock(finalPath, 'text');
 
     return new vscode.Hover(markdown, range);

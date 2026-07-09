@@ -34,7 +34,7 @@ Higher priority wins on alias key collisions. Fallback if no reader produces map
 ## Gotchas
 
 - **VSCodeSettingsReader** only returns mappings when user explicitly overrides the default — otherwise returns `[]` to let lower-priority readers provide values.
-- **Config cache TTL**: 5 seconds (`configService.ts`). Clear with "Alias Jump: Reload Configuration" command or `clearAllCaches()`.
+- **Config cache TTL**: 5 seconds (`configService.ts`). Clear with "Alias Jump Pro: Reload Configuration" command or `clearAllCaches()`.
 - **File resolution**: `joiningSuffix` in `utils/index.ts` tries direct extension append first, then `index.{ext}` fallback. Uses `allowedsuffix` setting (default: `["js","vue","jsx","ts","tsx","svelte"]`).
 - **Root path detection**: Controlled by `alias-jump-pro.rootpath` setting (default `"package.json"`).
 - **Comment handling**: `removeComments` in utilities strips block comments before alias parsing.

@@ -1,4 +1,4 @@
-# Alias Jump
+# Alias Jump Pro
 
 [English](./README.md)
 
@@ -65,7 +65,7 @@ import { utils } from '@/utils'           // Ctrl+Click 跳转
 
 ### 自动配置来源
 
-Alias Jump 按以下优先级读取别名：
+Alias Jump Pro 按以下优先级读取别名：
 
 1. VS Code 设置 `alias-jump-pro.mappings`
 2. Vite `resolve.alias`
@@ -80,7 +80,7 @@ Alias Jump 按以下优先级读取别名：
 
 | 命令 | 描述 |
 |------|------|
-| `Alias Jump: Reload Configuration` | 清除缓存并重新加载配置 |
+| `Alias Jump Pro: Reload Configuration` | 清除缓存并重新加载配置 |
 
 ## 支持的语言
 

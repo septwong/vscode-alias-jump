@@ -1,4 +1,4 @@
-# Alias Jump
+# Alias Jump Pro
 
 [中文文档](./README.zh-CN.md)
 
@@ -65,7 +65,7 @@ Add to your `settings.json`:
 
 ### Automatic Config Sources
 
-Alias Jump uses the following priority order:
+Alias Jump Pro uses the following priority order:
 
 1. VS Code setting `alias-jump-pro.mappings`
 2. Vite `resolve.alias`
@@ -80,7 +80,7 @@ Alias Jump uses the following priority order:
 
 | Command | Description |
 |---------|-------------|
-| `Alias Jump: Reload Configuration` | Clear cache and reload configuration |
+| `Alias Jump Pro: Reload Configuration` | Clear cache and reload configuration |
 
 ## Supported Languages
 
