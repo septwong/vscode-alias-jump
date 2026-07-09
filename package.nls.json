@@ -6,5 +6,6 @@
   "configuration.rootpath.description": "File name used to find the closest project root from the current file.",
   "configuration.allowedsuffix.description": "File extensions used when resolving paths without an extension.",
   "command.reloadConfig.title": "Reload Configuration",
+  "command.showConfig.title": "Show Configuration",
   "command.category": "Alias Jump Pro"
 }

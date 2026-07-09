@@ -24,7 +24,9 @@ export function activate(context: vscode.ExtensionContext) {
     { scheme: 'file', language: 'typescript' },
     { scheme: 'file', language: 'javascriptreact' },
     { scheme: 'file', language: 'typescriptreact' },
-    { scheme: 'file', language: 'svelte' }
+    { scheme: 'file', language: 'svelte' },
+    { scheme: 'file', language: 'nvue' },
+    { scheme: 'file', language: 'uvue' }
   ];
 
   // Register providers with services
@@ -49,6 +51,21 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
   context.subscriptions.push(reloadCommand);
+
+  // Register show config command
+  const showConfigCommand = vscode.commands.registerCommand('alias-jump-pro.showConfig', async () => {
+    const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
+    if (!workspaceFolder) {
+      vscode.window.showInformationMessage('No workspace folder open');
+      return;
+    }
+    const config = await configService.getConfig(workspaceFolder);
+    const msg = `Project root: ${config.projectRoot}\nMappings: ${JSON.stringify(config.mappings, null, 2)}\nAllowed suffixes: [${config.allowedsuffix.join(', ')}]`;
+    vscode.window.showInformationMessage(msg);
+    console.log('[Alias Jump] Config:', msg);
+  });
+
+  context.subscriptions.push(showConfigCommand);
 }
 
 export function deactivate() {

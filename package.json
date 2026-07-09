@@ -2,7 +2,7 @@
   "name": "alias-jump-pro",
   "displayName": "Alias Jump Pro",
   "description": "%description%",
-  "version": "1.3.0",
+  "version": "1.3.3",
   "icon": "assets/logo.png",
   "publisher": "SeptWong",
   "license": "MIT",
@@ -47,6 +47,46 @@
   ],
   "main": "./dist/extension.js",
   "contributes": {
+    "languages": [
+      {
+        "id": "vue",
+        "aliases": [
+          "Vue",
+          "vue"
+        ],
+        "extensions": [
+          ".vue"
+        ]
+      },
+      {
+        "id": "nvue",
+        "aliases": [
+          "nvue"
+        ],
+        "extensions": [
+          ".nvue"
+        ]
+      },
+      {
+        "id": "uvue",
+        "aliases": [
+          "uvue"
+        ],
+        "extensions": [
+          ".uvue"
+        ]
+      },
+      {
+        "id": "svelte",
+        "aliases": [
+          "Svelte",
+          "svelte"
+        ],
+        "extensions": [
+          ".svelte"
+        ]
+      }
+    ],
     "configuration": {
       "title": "%configuration.title%",
       "properties": {
@@ -85,6 +125,11 @@
       {
         "command": "alias-jump-pro.reloadConfig",
         "title": "%command.reloadConfig.title%",
+        "category": "%command.category%"
+      },
+      {
+        "command": "alias-jump-pro.showConfig",
+        "title": "%command.showConfig.title%",
         "category": "%command.category%"
       }
     ]

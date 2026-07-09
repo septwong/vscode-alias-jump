@@ -4,6 +4,20 @@ All notable changes to the "alias-jump-pro" extension will be documented in this
 
 Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
+## [1.3.3] - 2026-07-09
+
+### Fixed
+
+- Prefer ESM package entry points during bundling so `jsonc-parser` is fully bundled and debug activation no longer fails on `./impl/format`.
+
+## [1.3.2] - 2026-07-09
+
+### Fixed
+
+- Bundle `jsonc-parser` into the extension output so installed VSIX packages activate correctly.
+- Contribute Vue-related language ids so `.vue`, `.nvue`, `.uvue`, and `.svelte` files can activate the extension without relying on another language extension.
+- Register definition and hover providers for `nvue` and `uvue` documents.
+
 ## [1.3.0] - 2026-07-08
 
 ### Added

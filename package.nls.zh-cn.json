@@ -6,5 +6,6 @@
   "configuration.rootpath.description": "从当前文件向上查找最近项目根目录时使用的文件名。",
   "configuration.allowedsuffix.description": "解析无扩展名路径时尝试的文件扩展名。",
   "command.reloadConfig.title": "重新加载配置",
+  "command.showConfig.title": "显示配置",
   "command.category": "Alias Jump Pro"
 }
