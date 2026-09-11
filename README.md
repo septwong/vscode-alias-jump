@@ -2,98 +2,61 @@
 
 [中文文档](./README.zh-CN.md)
 
-A VS Code extension that enables navigation to alias path definitions with `Ctrl+Click`. Perfect for projects using path aliases like `@/components/Button`.
-
-## Features
-
-- **Alias Path Navigation**: Jump to files using path aliases (e.g., `@/components/Button`)
-- **Resolved Path Hover**: Hover an alias or relative path to see the resolved file path
-- **Relative Path Support**: Also works with `./` and `../` relative paths
-- **Multi-language Support**: Works with Vue, JavaScript, TypeScript, JSX, TSX, CSS, SCSS, Less, Svelte, and uni-app (`.nvue`, `.uvue`)
-- **Automatic Config Detection**: Reads aliases from VS Code settings, Vite, Webpack, `tsconfig.json`, and `jsconfig.json`
-- **tsconfig/jsconfig Extends Support**: Reads aliases inherited from extended config files
-- **Auto Suffix Resolution**: Automatically resolves file extensions (`.js`, `.vue`, `.ts`, `.css`, `.scss`, `.less`, `.nvue`, `.uvue`, etc.)
-- **Nested Project Root Detection**: Finds the closest configured root marker, useful for monorepos
-- **Performance Optimized**: Caches resolved project configs for faster navigation
+A VS Code extension for jumping to files from alias and relative paths. Hold `Ctrl` (`Cmd` on macOS) and click a path to open it.
 
 ## Usage
 
-1. Use aliases in VS Code settings, Vite, Webpack, `tsconfig.json`, or `jsconfig.json`
-2. Hold `Ctrl` (or `Cmd` on macOS) and click on an alias path
-3. The editor will navigate to the target file
-4. Hover the same path to inspect the resolved absolute file path
+Use an alias in your project:
 
-### Example
-
-```javascript
-// With alias configured as { "@": "src" }
-import Button from '@/components/Button'  // Ctrl+Click to navigate
-import { utils } from '@/utils'           // Ctrl+Click to navigate
+```ts
+import Button from '@/components/Button'
+import { formatDate } from '@/utils/date'
 ```
 
-```scss
-.logo {
-  background-image: url(@/assets/logo);
-}
-```
+`./` and `../` paths work too. Hover a path to see where it ultimately resolves.
 
-## Extension Settings
+### Automatic detection
 
-This extension contributes the following settings:
+No extra setup is needed. The extension reads aliases from:
 
-| Setting | Type | Default | Description |
-|---------|------|---------|-------------|
-| `alias-jump-pro.mappings` | object | `{ "@": "/src" }` | Path mappings. Key is the alias, value is the path relative to project root. |
-| `alias-jump-pro.rootpath` | string | `"package.json"` | File name used to find the closest project root from the current file. |
-| `alias-jump-pro.allowedsuffix` | array | `["js", "vue", "jsx", "ts", "tsx", "svelte", "css", "scss", "less", "nvue", "uvue"]` | File extensions used when resolving paths without an extension. |
+- VS Code settings
+- Vite
+- Webpack
+- `tsconfig.json`
+- `jsconfig.json`
 
-### Configuration Example
+If none is found, `@` resolves to `src` by default.
 
-Add to your `settings.json`:
+Supported languages and frameworks:
+
+- Vue
+- JavaScript
+- TypeScript
+- CSS, SCSS, and Less
+- Svelte
+- uni-app
+
+## Manual configuration
+
+To override automatic detection, add this to VS Code `settings.json`:
 
 ```json
 {
   "alias-jump-pro.mappings": {
     "@": "src",
-    "@components": "src/components",
-    "@utils": "src/utils",
-    "@assets": "src/assets"
-  },
-  "alias-jump-pro.allowedsuffix": ["js", "vue", "jsx", "ts", "tsx", "svelte", "css", "scss", "less", "nvue", "uvue"]
+    "@components": "src/components"
+  }
 }
 ```
 
-### Automatic Config Sources
+Optional settings:
 
-Alias Jump Pro uses the following priority order:
+- `alias-jump-pro.rootpath`: project-root marker; defaults to `package.json`.
+- `alias-jump-pro.allowedsuffix`: extensions to try for extensionless paths.
 
-1. VS Code setting `alias-jump-pro.mappings`
-2. Vite `resolve.alias`
-3. Webpack `resolve.alias`
-4. `tsconfig.json` / `jsconfig.json` `compilerOptions.paths`, including local `extends` chains
-5. uni-app `pages.json` (detects `src/` directory to determine mapping)
-6. Fallback `{ "@": "src" }`
+## Command
 
-> **uni-app**: The extension automatically detects uni-app projects by `pages.json`. If `src/` directory exists, maps `@` → `src`; otherwise maps `@` → project root. This covers HBuilderX, Vue CLI, and Vite created projects. `.nvue` and `.uvue` files are fully supported.
-
-## Commands
-
-| Command | Description |
-|---------|-------------|
-| `Alias Jump Pro: Reload Configuration` | Clear cache and reload configuration |
-
-## Supported Languages
-
-- Vue (`.vue`)
-- JavaScript (`.js`)
-- TypeScript (`.ts`)
-- JSX (`.jsx`)
-- TSX (`.tsx`)
-- CSS (`.css`)
-- SCSS (`.scss`)
-- Less (`.less`)
-- Svelte (`.svelte`)
-- uni-app (`.nvue`, `.uvue`)
+`Alias Jump Pro: Reload Configuration` reloads the configuration.
 
 ## License
 

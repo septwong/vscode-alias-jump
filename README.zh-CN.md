@@ -2,98 +2,61 @@
 
 [English](./README.md)
 
-一个 VS Code 扩展，支持使用 `Ctrl+Click` 跳转到别名路径定义。非常适合使用路径别名的项目，如 `@/components/Button`。
+VS Code 路径跳转扩展：按住 `Ctrl`（macOS 为 `Cmd`）点击别名或相对路径，即可打开目标文件。
 
-## 功能特性
+## 使用
 
-- **别名路径跳转**：通过路径别名跳转到文件（例如 `@/components/Button`）
-- **真实路径悬停提示**：鼠标悬停在别名或相对路径上时显示解析后的文件路径
-- **相对路径支持**：同时支持 `./` 和 `../` 相对路径
-- **多语言支持**：支持 Vue、JavaScript、TypeScript、JSX、TSX、CSS、SCSS、Less、Svelte 和 uni-app（`.nvue`、`.uvue`）
-- **自动配置识别**：自动读取 VS Code settings、Vite、Webpack、`tsconfig.json` 和 `jsconfig.json`
-- **tsconfig/jsconfig extends 支持**：读取继承配置文件中的别名
-- **自动后缀解析**：自动解析文件扩展名（`.js`、`.vue`、`.ts`、`.css`、`.scss`、`.less`、`.nvue`、`.uvue` 等）
-- **嵌套项目根目录检测**：从当前文件向上查找最近的项目根标记，适合 monorepo
-- **性能优化**：缓存已解析的项目配置以加快导航速度
+直接在项目里使用别名即可：
 
-## 使用方法
-
-1. 在 VS Code settings、Vite、Webpack、`tsconfig.json` 或 `jsconfig.json` 中配置路径别名
-2. 按住 `Ctrl`（macOS 上为 `Cmd`）并点击别名路径
-3. 编辑器将跳转到目标文件
-4. 鼠标悬停在同一路径上可查看解析后的绝对文件路径
-
-### 示例
-
-```javascript
-// 配置别名为 { "@": "src" }
-import Button from '@/components/Button'  // Ctrl+Click 跳转
-import { utils } from '@/utils'           // Ctrl+Click 跳转
+```ts
+import Button from '@/components/Button'
+import { formatDate } from '@/utils/date'
 ```
 
-```scss
-.logo {
-  background-image: url(@/assets/logo);
-}
-```
+也支持 `./`、`../` 等相对路径。将鼠标悬停在路径上，可查看它最终指向的位置。
 
-## 扩展设置
+### 自动识别
 
-此扩展提供以下设置：
+无需额外配置。扩展会自动读取以下位置的别名：
 
-| 设置 | 类型 | 默认值 | 描述 |
-|------|------|--------|------|
-| `alias-jump-pro.mappings` | object | `{ "@": "/src" }` | 路径映射。键为别名，值为相对于项目根目录的路径。 |
-| `alias-jump-pro.rootpath` | string | `"package.json"` | 从当前文件向上查找最近项目根目录时使用的文件名。 |
-| `alias-jump-pro.allowedsuffix` | array | `["js", "vue", "jsx", "ts", "tsx", "svelte", "css", "scss", "less", "nvue", "uvue"]` | 解析无扩展名路径时尝试的文件扩展名。 |
+- VS Code 设置
+- Vite
+- Webpack
+- `tsconfig.json`
+- `jsconfig.json`
 
-### 配置示例
+如果没有找到配置，则默认将 `@` 解析为 `src`。
 
-添加到你的 `settings.json`：
+支持：
+
+- Vue
+- JavaScript
+- TypeScript
+- CSS、SCSS、Less
+- Svelte
+- uni-app
+
+## 手动配置
+
+如需覆盖自动识别，在 VS Code `settings.json` 中添加：
 
 ```json
 {
   "alias-jump-pro.mappings": {
     "@": "src",
-    "@components": "src/components",
-    "@utils": "src/utils",
-    "@assets": "src/assets"
-  },
-  "alias-jump-pro.allowedsuffix": ["js", "vue", "jsx", "ts", "tsx", "svelte", "css", "scss", "less", "nvue", "uvue"]
+    "@components": "src/components"
+  }
 }
 ```
 
-### 自动配置来源
+可选设置：
 
-Alias Jump Pro 按以下优先级读取别名：
-
-1. VS Code 设置 `alias-jump-pro.mappings`
-2. Vite `resolve.alias`
-3. Webpack `resolve.alias`
-4. `tsconfig.json` / `jsconfig.json` 的 `compilerOptions.paths`，包含本地 `extends` 继承链
-5. uni-app `pages.json`（检测 `src/` 目录来决定映射关系）
-6. 兜底配置 `{ "@": "src" }`
-
-> **uni-app**：扩展通过 `pages.json` 自动识别 uni-app 项目。若存在 `src/` 目录则映射 `@` → `src`，否则映射 `@` → 项目根目录。兼容 HBuilderX、Vue CLI、Vite 三种创建方式。`.nvue` 和 `.uvue` 文件已得到完整支持。
+- `alias-jump-pro.rootpath`：项目根目录标记，默认 `package.json`。
+- `alias-jump-pro.allowedsuffix`：无扩展名路径的尝试后缀。
 
 ## 命令
 
-| 命令 | 描述 |
-|------|------|
-| `Alias Jump Pro: Reload Configuration` | 清除缓存并重新加载配置 |
-
-## 支持的语言
-
-- Vue (`.vue`)
-- JavaScript (`.js`)
-- TypeScript (`.ts`)
-- JSX (`.jsx`)
-- TSX (`.tsx`)
-- CSS (`.css`)
-- SCSS (`.scss`)
-- Less (`.less`)
-- Svelte (`.svelte`)
-- uni-app (`.nvue`、`.uvue`)
+`Alias Jump Pro: Reload Configuration`：重新读取配置。
 
 ## 许可证
 
